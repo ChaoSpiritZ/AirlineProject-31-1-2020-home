@@ -1,0 +1,214 @@
+
+CREATE PROCEDURE ADD_TICKET @flightId bigint, @customerId bigint
+AS
+INSERT INTO Tickets VALUES (@flightId, @customerId); SELECT SCOPE_IDENTITY()
+
+GO
+
+CREATE PROCEDURE GET_TICKET @id bigint
+AS
+select * from Tickets where ID = @id
+
+GO
+
+CREATE PROCEDURE GET_ALL_TICKETS
+AS
+select * from Tickets
+
+GO
+
+CREATE PROCEDURE REMOVE_TICKET @id bigint
+AS
+DELETE FROM TICKETS WHERE ID = @id
+
+GO
+
+CREATE PROCEDURE UPDATE_TICKET @flightId bigint, @customerId bigint, @id bigint
+AS
+UPDATE Tickets set FLIGHT_ID = @flightId, CUSTOMER_ID = @customerId where ID = @id
+
+GO
+
+CREATE PROCEDURE ADD_COUNTRY @countryName nvarchar(50)
+AS
+INSERT INTO Countries VALUES (@countryName); SELECT SCOPE_IDENTITY()
+
+GO
+
+CREATE PROCEDURE GET_COUNTRY @id bigint
+AS
+SELECT * FROM Countries where ID = @id
+
+GO
+
+CREATE PROCEDURE GET_ALL_COUNTRIES
+AS
+select * from Countries
+
+GO
+
+CREATE PROCEDURE REMOVE_COUNTRY @id bigint
+AS
+DELETE FROM Countries WHERE ID = @id
+
+GO
+
+CREATE PROCEDURE UPDATE_COUNTRY @countryName nvarchar(50), @id bigint
+AS
+update Countries set COUNTRY_NAME = @countryName where ID = @id
+
+GO
+
+CREATE PROCEDURE ADD_CUSTOMER @firstName nvarchar(50), @lastName nvarchar(50), @userName nvarchar(50), @password nvarchar(50), @address nvarchar(50), @phoneNo nvarchar(50), @creditCardNumber nvarchar(50)
+AS
+INSERT INTO Customers VALUES (@firstName, @lastName, @userName, @password, @address, @phoneNo, @creditCardNumber); SELECT SCOPE_IDENTITY()
+
+GO
+
+CREATE PROCEDURE GET_CUSTOMER @id bigint
+AS
+select * from Customers where ID = @id
+
+GO
+
+CREATE PROCEDURE GET_ALL_CUSTOMERS
+AS
+select * from Customers
+
+GO
+
+CREATE PROCEDURE REMOVE_CUSTOMER @id bigint
+AS
+DELETE FROM Customers WHERE ID = @id
+
+GO
+
+CREATE PROCEDURE UPDATE_CUSTOMER @firstName nvarchar(50), @lastName nvarchar(50), @userName nvarchar(50), @password nvarchar(50), @address nvarchar(50), @phoneNo nvarchar(50), @creditCardNumber nvarchar(50), @id bigint
+AS
+update Customers set FIRST_NAME = @firstName, LAST_NAME = @lastName, USER_NAME = @userName, PASSWORD = @password, ADDRESS = @address, PHONE_NO = @phoneNo, CREDIT_CARD_NUMBER = @creditCardNumber where ID = @id
+
+GO
+
+CREATE PROCEDURE GET_CUSTOMER_BY_USERNAME @userName nvarchar(50)
+AS
+select * from Customers where USER_NAME = @userName
+
+GO
+
+CREATE PROCEDURE ADD_AIRLINE_COMPANY @airlineName nvarchar(50), @userName nvarchar(50), @password nvarchar(50), @countryCode bigint
+AS
+INSERT INTO AirlineCompanies VALUES (@airlineName, @userName, @password, @countryCode); SELECT SCOPE_IDENTITY()
+
+GO
+
+CREATE PROCEDURE GET_AIRLINE_COMPANY @id bigint
+AS
+select * from AirlineCompanies where ID = @id
+
+GO
+
+CREATE PROCEDURE GET_AIRLINE_BY_AIRLINE_NAME @airlineName nvarchar(50)
+AS
+SELECT * from AirlineCompanies where AIRLINE_NAME = @airlineName
+
+GO
+
+CREATE PROCEDURE GET_AIRLINE_BY_USERNAME @userName nvarchar(50)
+AS
+select * from AirlineCompanies where USER_NAME = @userName
+
+GO
+
+CREATE PROCEDURE GET_ALL_AIRLINE_COMPANIES
+AS
+select * from AirlineCompanies
+
+GO
+
+CREATE PROCEDURE GET_ALL_AIRLINES_BY_COUNTRY @countryId bigint
+AS
+select * from AirlineCompanies where COUNTRY_CODE = @countryId
+
+GO
+
+CREATE PROCEDURE REMOVE_AIRLINE_COMPANY @id bigint
+AS
+DELETE FROM AirlineCompanies WHERE ID = @id
+
+GO
+
+CREATE PROCEDURE UPDATE_AIRLINE_COMPANY @airlineName nvarchar(50), @userName nvarchar(50), @password nvarchar(50), @countryCode bigint, @id bigint
+AS
+update AirlineCompanies set AIRLINE_NAME = @airlineName, USER_NAME = @userName, PASSWORD = @password, COUNTRY_CODE = @countryCode where ID = @id
+
+GO
+
+CREATE PROCEDURE ADD_FLIGHT @airlineCompanyId bigint, @originCountryCode bigint, @destinationCountryCode bigint, @departureTime datetime, @landingTime datetime, @remainingTickets int
+AS
+INSERT INTO Flights VALUES (@airlineCompanyId, @originCountryCode, @destinationCountryCode, @departureTime, @landingTime, @remainingTickets); SELECT SCOPE_IDENTITY()
+
+GO
+
+CREATE PROCEDURE GET_FLIGHT @id bigint
+AS
+select * from Flights where ID = @id
+
+GO
+
+CREATE PROCEDURE GET_ALL_FLIGHTS
+AS
+select * from Flights
+
+GO
+
+CREATE PROCEDURE REMOVE_FLIGHT @id bigint
+AS
+DELETE FROM Flights WHERE ID = @id
+
+GO
+
+CREATE PROCEDURE UPDATE_FLIGHT @airlineCompanyId bigint, @originCountryCode bigint, @destinationCountryCode bigint, @departureTime datetime, @landingTime datetime, @remainingTickets int, @id bigint
+AS
+update Flights set AIRLINECOMPANY_ID = @airlineCompanyId, ORIGIN_COUNTRY_CODE = @originCountryCode, DESTINATION_COUNTRY_CODE = @destinationCountryCode, DEPARTURE_TIME = @departureTime, LANDING_TIME = @landingTime, REMAINING_TICKETS = @remainingTickets where ID = @id
+
+GO
+
+CREATE PROCEDURE GET_FLIGHTS_BY_CUSTOMER @customerId bigint
+AS
+Select F.ID, F.AIRLINECOMPANY_ID, F.ORIGIN_COUNTRY_CODE, F.DESTINATION_COUNTRY_CODE, F.DEPARTURE_TIME, F.LANDING_TIME, F.REMAINING_TICKETS from Flights as F inner join Tickets as T on F.ID = T.FLIGHT_ID inner join Customers as C on T.CUSTOMER_ID = C.ID where C.ID = @customerId
+
+GO
+
+CREATE PROCEDURE GET_FLIGHTS_BY_DEPARTURE_DATE @departureDate datetime
+AS
+select * from Flights where DEPARTURE_TIME = @departureDate
+
+GO
+
+CREATE PROCEDURE GET_FLIGHTS_BY_DESTINATION_COUNTRY @countryCode bigint
+AS
+select * from Flights where DESTINATION_COUNTRY_CODE = @countryCode
+
+GO
+
+CREATE PROCEDURE GET_FLIGHTS_BY_LANDING_DATE @landingDate datetime
+AS
+select * from Flights where LANDING_TIME = @landingDate
+
+GO
+
+CREATE PROCEDURE GET_FLIGHTS_BY_ORIGIN_COUNTRY @countryCode bigint
+AS
+select * from Flights where ORIGIN_COUNTRY_CODE = @countryCode
+
+GO
+
+CREATE PROCEDURE REMOVE_TICKETS_BY_FLIGHT @flightId bigint
+AS
+DELETE FROM TICKETS WHERE FLIGHT_ID = @flightId
+
+GO
+
+CREATE PROCEDURE REMOVE_TICKETS_BY_CUSTOMER @customerId bigint
+AS
+DELETE FROM TICKETS WHERE CUSTOMER_ID = @customerId
