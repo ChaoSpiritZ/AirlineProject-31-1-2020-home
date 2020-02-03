@@ -10,5 +10,6 @@ namespace AirlineProject
     {
         void RemoveTicketsByFlight(Flight flight);
         void RemoveTicketsByCustomer(Customer customer);
+        IList<Ticket> GetTicketsByCustomerId(Customer customer);
     }
 }

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administrator.cs" />
+    <Compile Include="FlyingCenterSystem.cs" />
     <Compile Include="MyExceptions\CountryNotFoundException.cs" />
     <Compile Include="MyExceptions\AirlineNameAlreadyExistsException.cs" />
     <Compile Include="AnonymousUserFacade.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="MyExceptions\InvalidFlightDateException.cs" />
     <Compile Include="MyExceptions\InvalidPOCOException.cs" />
     <Compile Include="MyExceptions\NoMoreTicketsException.cs" />
+    <Compile Include="MyExceptions\TicketAlreadyExistsException.cs" />
     <Compile Include="MyExceptions\TicketNotFoundException.cs" />
     <Compile Include="POCOs\AirlineCompany.cs" />
     <Compile Include="DAOMSSQLs\AirlineDAOMSSQL.cs" />

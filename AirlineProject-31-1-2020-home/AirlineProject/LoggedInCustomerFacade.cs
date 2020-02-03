@@ -36,14 +36,20 @@ namespace AirlineProject
             POCOValidator.FlightValidator(flight, false);
             if (_flightDAO.Get(flight.ID) == null)
                 throw new FlightNotFoundException($"failed to purchase ticket, there is no flight with id of [{flight.ID}]");
+            IList<Ticket> tickets = _ticketDAO.GetTicketsByCustomerId(token.User);
+            foreach (var item in tickets) //again.... feels inefficient...
+            {
+                if (item.FlightId == flight.ID)
+                    throw new TicketAlreadyExistsException($"failed to purchase ticket, you already purchased a ticket to flight [{flight}]");
+            }
             if (_flightDAO.Get(flight.ID).RemainingTickets == 0)
                 throw new NoMoreTicketsException($"failed to purchase ticket to flight [{flight}], there are no more tickets left!");
             //do i even need to check if the flight in the parameter is legit?
-            Ticket ticket = new Ticket(0, flight.ID, token.User.ID);
-            _ticketDAO.Add(ticket);
+            Ticket newTicket = new Ticket(0, flight.ID, token.User.ID);
+            _ticketDAO.Add(newTicket);
             flight.RemainingTickets--; //do i do this with the parameter flight or with the one from the database?
             _flightDAO.Update(flight);
-            return ticket;
+            return newTicket;
         }
     }
 }

@@ -83,6 +83,35 @@ namespace AirlineProject
             return tickets;
         }
 
+        public IList<Ticket> GetTicketsByCustomerId(Customer customer)
+        {
+            List<Ticket> tickets = new List<Ticket>();
+            using (SqlConnection con = new SqlConnection(AirlineProjectConfig.CONNECTION_STRING))
+            {
+                con.Open();
+                using (SqlCommand cmd = new SqlCommand("GET_TICKETS_BY_CUSTOMER_ID", con))
+                {
+                    cmd.Parameters.AddWithValue("@customerId", customer.ID);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Ticket ticket = new Ticket()
+                            {
+                                ID = (long)reader["ID"],
+                                FlightId = (long)reader["FLIGHT_ID"],
+                                CustomerId = (long)reader["CUSTOMER_ID"]
+                            };
+                            tickets.Add(ticket);
+                        }
+                    }
+                }
+            }
+            return tickets;
+        }
+
         public void Remove(Ticket t)
         {
             using (SqlConnection con = new SqlConnection(AirlineProjectConfig.CONNECTION_STRING))
