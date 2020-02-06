@@ -218,3 +218,15 @@ GO
 CREATE PROCEDURE GET_TICKETS_BY_CUSTOMER_ID @customerId bigint
 AS
 Select * from Tickets where CUSTOMER_ID = @customerId
+
+GO
+
+CREATE PROCEDURE GET_FLIGHTS_BY_AIRLINE_COMPANY_ID @airlineCompanyId bigint
+AS
+select * from Flights where AIRLINECOMPANY_ID = @airlineCompanyId
+
+GO
+
+CREATE PROCEDURE GET_TICKETS_BY_AIRLINE_COMPANY @airlineCompanyId bigint
+AS
+select T.ID, T.FLIGHT_ID, T.CUSTOMER_ID from Tickets as T inner join Flights as F on T.FLIGHT_ID = F.ID inner join AirlineCompanies as AC on F.AIRLINECOMPANY_ID = AC.ID where AC.ID = @airlineCompanyId
